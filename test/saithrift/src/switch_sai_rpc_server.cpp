@@ -2353,7 +2353,7 @@ class switch_sai_rpcHandler : virtual public switch_sai_rpcIf {
                case SAI_TUNNEL_TERM_TABLE_ENTRY_ATTR_TUNNEL_TYPE :
                         attr_list[i].value.s32=attribute.value.s32;
                         break;
-               case SAI_TUNNEL_TERM_TABLE_ENTRY_ACTION_TUNNEL_ID:
+               case SAI_TUNNEL_TERM_TABLE_ENTRY_ATTR_ACTION_TUNNEL_ID:
                         attr_list[i].value.oid=attribute.value.oid;
                         break;
                default:
