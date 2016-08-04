@@ -2304,7 +2304,7 @@ class switch_sai_rpcHandler : virtual public switch_sai_rpcIf {
                 case SAI_TUNNEL_ATTR_OVERLAY_INTERFACE:
                         attr_list[i].value.oid =attribute.value.oid;
                         break;
-                case SAI_TUNNEL_ATTR_SRC_IP:
+                case SAI_TUNNEL_ATTR_ENCAP_SRC_IP:
                         sai_thrift_parse_ip_address(attribute.value.ipaddr, &attr_list[i].value.ipaddr);
                         break;
                 case SAI_TUNNEL_ATTR_ENCAP_TTL_MODE :
@@ -2338,20 +2338,22 @@ class switch_sai_rpcHandler : virtual public switch_sai_rpcIf {
           attribute = (sai_thrift_attribute_t)*it;
           attr_list[i].id = attribute.id;
         switch (attribute.id) {
-               case SAI_TUNNEL_TABLE_ENTRY_ATTR_VR_ID:
+               case SAI_TUNNEL_TERM_TABLE_ENTRY_ATTR_VR_ID:
                         attr_list[i].value.oid = attribute.value.oid;					
                         break;
-               case SAI_TUNNEL_TABLE_ENTRY_ATTR_TYPE :
+               case SAI_TUNNEL_TERM_TABLE_ENTRY_ATTR_TYPE :
                         attr_list[i].value.u32 = attribute.value.u32;
                         break;
-               case SAI_TUNNEL_TABLE_ENTRY_ATTR_DST_IP:
-               case SAI_TUNNEL_TABLE_ENTRY_ATTR_SRC_IP:
+               case SAI_TUNNEL_TERM_TABLE_ENTRY_ATTR_DST_IP:
+                        sai_thrift_parse_ip_address(attribute.value.ipaddr, &attr_list[i].value.ipaddr);             
+                        break;
+               case SAI_TUNNEL_TERM_TABLE_ENTRY_ATTR_SRC_IP:
                         sai_thrift_parse_ip_address(attribute.value.ipaddr, &attr_list[i].value.ipaddr);		   		   
                         break;
-               case SAI_TUNNEL_TABLE_ENTRY_ATTR_TUNNEL_TYPE :
+               case SAI_TUNNEL_TERM_TABLE_ENTRY_ATTR_TUNNEL_TYPE :
                         attr_list[i].value.s32=attribute.value.s32;
                         break;
-               case SAI_TUNNEL_TABLE_ENTRY_ACTION_TUNNEL_ID:
+               case SAI_TUNNEL_TERM_TABLE_ENTRY_ACTION_TUNNEL_ID:
                         attr_list[i].value.oid=attribute.value.oid;
                         break;
                default:
@@ -2405,7 +2407,7 @@ class switch_sai_rpcHandler : virtual public switch_sai_rpcIf {
       sai_object_id_t tunnel_entry_id = 0;
       sai_thrift_parse_tunnel_entry_attributes(thrift_attr_list,attr_list);
       uint32_t list_count = thrift_attr_list.size();
-      status = tunnel_api->create_tunnel_table_entry(&tunnel_entry_id, list_count, attr_list);
+      status = tunnel_api->create_tunnel_term_table_entry(&tunnel_entry_id, list_count, attr_list);
       free(attr_list);
       printf("tunnel_entry_id %d\n",tunnel_entry_id);
       return tunnel_entry_id;
@@ -2420,7 +2422,7 @@ class switch_sai_rpcHandler : virtual public switch_sai_rpcIf {
           return status;
       }
       sai_object_id_t tunnel_entry_id = (sai_object_id_t ) thrift_tunnel_entry_id;
-      status = tunnel_api->remove_tunnel_table_entry(tunnel_entry_id);
+      status = tunnel_api->remove_tunnel_term_table_entry(tunnel_entry_id);
       return status;
 	  }
   
